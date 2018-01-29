@@ -106,14 +106,55 @@ This is a simple guide to get started with PintOS , by Hicker.
         ln 362 (replace 'threads' with 'userprog')
                 '/home/hicker/Desktop/Pintos/userprog/build/loader.bin'
      ```
+## File Systems
+1. ##### Creating a simulated disk
+	You need to be in Pintos/userprog/build directory.
+	1. run this command to create a disk file with 2mb. Run
+	
+    ```
+    pintos-mkdisk filesys.dsk --filesys-size=2
+    ```
+    
+	2. Format the created disk filesystem , Run
+	
+    ```
+    pintos -f -q
+    ```
+    
+ 2. ##### Copy an example program to the filesystem
+	While still in Pintos/userprog/build directory.
+	
+    ```
+    pintos -p ../../examples/echo -a echo -- -q
+    ```
+
+ 3. ##### Running the program
+	
+    ```
+    pintos -q run 'echo'
+    ```
 
 
+   
+   
 
 ## PART 1: Implementing Process termination message:
 
-1. ##### Open .
-      ```
-      sudo apt-get install qemu
-      ```
-
-
+1. #### Edit thread.h
+	Open Pintos/threads/thread.h with text editor
+    ```
+    ln 86 
+		int exit_code;
+	```
+    After saving the file run,
+    ```
+    make clean
+    make
+    ```
+ 2. #### Edit process.c
+	Open Pintos/userprog/process.c with text editor
+    ```
+    ln 69 
+		thread_current()->exit_code = -1;
+	```
+             
