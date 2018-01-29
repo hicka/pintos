@@ -133,6 +133,18 @@ This is a simple guide to get started with PintOS , by Hicker.
     ```
     pintos -q run 'echo'
     ```
+ 4. ##### Listing programs in file system
+	
+    ```
+    pintos ls
+    ```
+ 5. ##### Removing a program from the filesystem
+	
+    ```
+    pintos -q rm filename
+    ```
+
+
 
 
    
@@ -140,21 +152,41 @@ This is a simple guide to get started with PintOS , by Hicker.
 
 ## PART 1: Implementing Process termination message:
 
-1. #### Edit thread.h
+1. ##### Edit thread.h
 	Open Pintos/threads/thread.h with text editor
     ```
     ln 86 
 		int exit_code;
 	```
-    After saving the file run,
+    After saving the file run in Pintos/threads direcotory,
     ```
     make clean
     make
     ```
- 2. #### Edit process.c
-	Open Pintos/userprog/process.c with text editor
+ 2. ##### Edit process.c
+	Open Pintos/userprog/process.c with text editor. type thse code.
+    
     ```
-    ln 69 
+    ln 69 after if(!success){
+    
 		thread_current()->exit_code = -1;
 	```
-             
+    
+    ```
+    ln 109  after uint32_t *pd;
+    
+		printf("%s: exit(%d)\n",cur->name,cur->exit_code);
+	```          
+ 3. ##### Re-Compile userprog Directory (Pintos/userprog)
+	 After saving the file run in Pintos/userprog direcotory,
+    ```
+	make clean
+    make
+    ```
+ 4. ##### Go to build folder
+	```
+    cd build
+    ```
+5. ##### You can now repeat steps in FileSystem to load a new pogram and you will see the process name and its exit code printed :) That's it!
+
+
