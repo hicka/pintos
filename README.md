@@ -153,7 +153,7 @@ This is a simple guide to get started with PintOS , by Hicker.
 ## PART 1: Implementing Process termination message:
 
 1. ##### Edit thread.h
-	Open Pintos/threads/thread.h with text editor
+	Open Pintos/threads/thread.h with text editor. You need this variable to store the exit code in the thread.
     ```
     ln 86 
 		int exit_code;
@@ -187,6 +187,6 @@ This is a simple guide to get started with PintOS , by Hicker.
 	```
     cd build
     ```
-5. ##### You can now repeat steps in FileSystem to load a new pogram and you will see the process name and its exit code printed :) That's it!
+5. ##### You can now repeat steps in FileSystem to create a disk and load a new pogram and you will see the process name and its exit code printed when it terminates  :) That's it!
 
 
