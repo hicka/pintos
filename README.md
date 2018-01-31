@@ -360,6 +360,8 @@ This is a simple guide to get started with PintOS , by Hicker.
     t->fd_count=2;
     t->exit_code = -100;
     t->waitingon=0;
+    
+    // comment out interrupt disable and interrupt set level.
 
     ```   
 1. ##### Edit thread.h  
