@@ -164,23 +164,25 @@ This is a simple guide to get started with PintOS , by Hicker.
     make
     ```
  2. ##### Edit process.c
-	Open Pintos/userprog/process.c with text editor. type thse code.
+	Edit Pintos/userprog/process.c
     
     ```
-    ln 69 after if(!success){
+    ln 69 inside if(!success){
     
-		thread_current()->exit_code = -1;
-	```
+		thread_current()->exit_code = -1; //setting the exit code to -1 if failed.
+		
+		}
+    ```
     
     ```
     ln 109  after uint32_t *pd;
-    
+    		// outputs the process termination message (name : exit(code) )
 		printf("%s: exit(%d)\n",cur->name,cur->exit_code);
-	```          
+    ```          
  3. ##### Re-Compile userprog Directory (Pintos/userprog)
 	 After saving the file run in Pintos/userprog direcotory,
     ```
-	make clean
+    make clean
     make
     ```
  4. ##### Go to build folder
@@ -203,7 +205,7 @@ This is a simple guide to get started with PintOS , by Hicker.
     ```
 	static bool setup_stack (void **esp);
     ```
-  	* to
+  * to
     ```
 	static bool setup_stack (void **esp, char * cmdline);
     ```
@@ -217,7 +219,7 @@ This is a simple guide to get started with PintOS , by Hicker.
     ```
     ##### Implementing the stack
     
-   * In line 320, change 
+   * In line 320, change (add one more parameter to pass the file name)
     ```
 	if (!setup_stack (esp))
     ```
@@ -298,7 +300,7 @@ This is a simple guide to get started with PintOS , by Hicker.
     }
     ```
 1. ##### Edit syscall.c
-	Open Pintos/userprog/syscall.c with text editor.
+    Open Pintos/userprog/syscall.c with text editor.
     * Add include for 'process.h'
     ```
 	#include "process.h"
@@ -342,7 +344,7 @@ This is a simple guide to get started with PintOS , by Hicker.
     }
     ```
 1. ##### Edit thread.c    
-	Open Pintos/threads/thread.c with text editor.
+    Open Pintos/threads/thread.c with text editor.
     * Line 193 add
     ```
     struct child* c = malloc(sizeof(*c));
@@ -358,14 +360,13 @@ This is a simple guide to get started with PintOS , by Hicker.
     t->parent = running_thread();
     list_init(&t->files);
     t->fd_count=2;
-    t->exit_code = -100;
     t->waitingon=0;
     
     // comment out interrupt disable and interrupt set level.
 
     ```   
 1. ##### Edit thread.h  
-	Open Pintos/threads/thread.h with text editor.
+    Open Pintos/threads/thread.h with text editor.
     * in Line 97 add inside struct thread
     ```
     bool ex;
