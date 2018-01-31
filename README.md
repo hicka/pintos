@@ -196,12 +196,12 @@ This is a simple guide to get started with PintOS , by Hicker.
 1. ##### Edit process.c
 	Open Pintos/userprog/process.c with text editor.
 
-    * Line 39, before making a new thread, add these lines.
+  * Line 39, before making a new thread, add these lines.
     ```
 	char *save_ptr;
 	file_name = strtok_r (file_name," ",&save_ptr);
     ```
-   * In line 204, change 
+  * In line 204, change 
     ```
 	static bool setup_stack (void **esp);
     ```
@@ -209,7 +209,7 @@ This is a simple guide to get started with PintOS , by Hicker.
     ```
 	static bool setup_stack (void **esp, char * cmdline);
     ```
-   * In line 233, after file = filesys_open (file_name); add these lines
+  * In line 233, comment the line  file = filesys_open (file_name);  and add these lines
     ```
 	char * fn_cp = malloc (strlen(file_name)+1);
 	strlcpy(fn_cp, file_name, strlen(file_name)+1);
@@ -228,7 +228,7 @@ This is a simple guide to get started with PintOS , by Hicker.
 	if (!setup_stack (esp,file_name))
     ```
      ##### replace the method setup_stack with this
-	```
+   ```
     static bool
     setup_stack (void **esp, char * file_name) 
     {
