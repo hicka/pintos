@@ -1,10 +1,11 @@
+
 # PintOS
 
-This is a simple guide to get started with PintOS , by Hicker.
+This is a simple guide to get started with PintOS.
 
 
 ## Follow these Steps:
-1. ##### Install QEMU Simulator if you havent already.
+1. ##### Install QEMU emulator if you haven't already.
       ```
       sudo apt-get install qemu
       ```
@@ -54,7 +55,7 @@ This is a simple guide to get started with PintOS , by Hicker.
         
     
  11. ### Export utils directory path to PATH variable
-      Open ~/.bashrc
+      Open ~/.bashrc with editor
       ```
       sudo nano ~/.bashrc
       ```
@@ -125,9 +126,10 @@ This is a simple guide to get started with PintOS , by Hicker.
 	While still in Pintos/userprog/build directory.
 	
     ```
-    pintos -p ../../examples/echo -a echo -- -q
+    pintos -p ../../examples/echo -a 'echo' -- -q
     ```
-
+	  Until you implement argument passing, you should only run programs without passing 		command-line arguments. Attempting to pass arguments to a program will include those arguments in the name of the program, which will probably fail.
+	  
  3. ##### Running the program
 	
     ```
@@ -165,7 +167,6 @@ This is a simple guide to get started with PintOS , by Hicker.
     ```
  2. ##### Edit process.c
 	Edit Pintos/userprog/process.c
-    
     ```
     ln 69 inside if(!success){
     
@@ -176,7 +177,8 @@ This is a simple guide to get started with PintOS , by Hicker.
     
     ```
     ln 109  after uint32_t *pd;
-    		// outputs the process termination message (name : exit(code) )
+    
+    	// outputs the process termination message (name : exit(code) )
 		printf("%s: exit(%d)\n",cur->name,cur->exit_code);
     ```          
  3. ##### Re-Compile userprog Directory (Pintos/userprog)
@@ -189,7 +191,7 @@ This is a simple guide to get started with PintOS , by Hicker.
 	```
     cd build
     ```
-5. ##### You can now repeat steps in FileSystem to create a disk and load a new pogram and you will see the process name and its exit code printed when it terminates  :) That's it!
+5. ##### You can now repeat steps in FileSystem to create a disk and load a new pogram. You won't see any program output until you create the SYS_WRITE system call
 
 ## PART 2: Argument Passing 'with some sys calls'
 
@@ -219,16 +221,16 @@ This is a simple guide to get started with PintOS , by Hicker.
     ```
     ##### Implementing the stack
     
-   * In line 320, change (add one more parameter to pass the file name)
+  * In line 320, change (add one more parameter to pass the file name)
     ```
 	if (!setup_stack (esp))
     ```
-   * to
+  * to
     ```
 	if (!setup_stack (esp,file_name))
     ```
-     ##### replace the method setup_stack with this
-   ```
+   ##### replace the method setup_stack with this
+```
     static bool
     setup_stack (void **esp, char * file_name) 
     {
@@ -298,19 +300,19 @@ This is a simple guide to get started with PintOS , by Hicker.
 
       return success;
     }
-    ```
+  ```
 1. ##### Edit syscall.c
     Open Pintos/userprog/syscall.c with text editor.
     * Add include for 'process.h'
     ```
 	#include "process.h"
     ```
-    * replace the syscall_handler function
+    #### replace the syscall_handler function
     * This implements three system calls 
-    * SYS_HALT
-    * SYS_EXIT
+    * SYS_HALT (Terminates Pintos by calling power_off())
+    * SYS_EXIT (user program that finishes in the normal way calls exit)
     * SYS_WRITE
-    * SYS_WRITE is needed to make printf work for programs like echo.c
+The write system call is for writing to fd 1, the system console. All of our test programs write to the console (the user process version of printf() is implemented this way), so they will all malfunction until write is available.
 	```
     static void
 	syscall_handler (struct intr_frame *f UNUSED) 
@@ -367,7 +369,7 @@ This is a simple guide to get started with PintOS , by Hicker.
     ```   
 1. ##### Edit thread.h  
     Open Pintos/threads/thread.h with text editor.
-    * in Line 97 add inside struct thread
+  * in Line 97 add inside struct thread
     ```
     bool ex;
     struct thread* parent;
@@ -376,7 +378,7 @@ This is a simple guide to get started with PintOS , by Hicker.
     struct list child_proc;
     int waitingon;
     ```    
-    * create struct child, outside struct thread
+  * create struct child, outside struct thread
     ```
     struct child{
       int tid;
@@ -385,3 +387,4 @@ This is a simple guide to get started with PintOS , by Hicker.
       bool used;
     };
     ```
+  * re-compile and run a user program with arguments.
