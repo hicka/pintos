@@ -363,9 +363,6 @@ The write system call is for writing to fd 1, the system console. All of our tes
     list_init(&t->files);
     t->fd_count=2;
     t->waitingon=0;
-    
-    // comment out interrupt disable and interrupt set level.
-
     ```   
 1. ##### Edit thread.h  
     Open Pintos/threads/thread.h with text editor.
