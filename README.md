@@ -312,18 +312,21 @@ DISCLAIMER: DO NOT EVER USE this for your coursework.
 		      return success;
 		    }
    ```
-2. ##### Edit syscall.c
+   
+2. ##### Edit syscall.c   
     Open Pintos/userprog/syscall.c with text editor.
     * Add include for 'process.h'
+    
     ```
 	#include "process.h"
     ```
-    Replace the syscall_handler function
-    * This implements three system calls 
-    * SYS_HALT (Terminates Pintos by calling power_off())
-    * SYS_EXIT (user program that finishes in the normal way calls exit)
-    * SYS_WRITE
-								The write system call is for writing to fd 1, the system console. All of our test programs write to the console (the user process version of printf() is implemented this way), so they will all malfunction until write is available.
+    
+Replace the syscall_handler function
+* This implements three system calls 
+* SYS_HALT (Terminates Pintos by calling power_off())
+* SYS_EXIT (user program that finishes in the normal way calls exit)
+* SYS_WRITE
+							The write system call is for writing to fd 1, the system console. All of our test programs write to the console (the user process version of printf() is implemented this way), so they will all malfunction until write is available.
                 
    ```
         static void
