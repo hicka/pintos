@@ -1,5 +1,6 @@
 
 
+
 # PintOS
 
 This is a private output of 'Operating Systems' coursework, PintOS.
@@ -10,7 +11,7 @@ DISCLAIMER: DO NOT EVER USE this for your coursework.
 1. ##### Install QEMU emulator if you haven't already.
       ```
       sudo apt-get install qemu
-      ```
+   ```
 
 2. ##### GDBMACROS
 	Open Pintos/utils/pintos-gdb with your editor and set it to the absoulte path of your gdb-macros.
@@ -19,31 +20,27 @@ DISCLAIMER: DO NOT EVER USE this for your coursework.
     ```
     
  3. ##### Compile Utils Directory (Pintos/utils)
-	
     ```
     cd utils
     make
     ```
- 
  4. ##### Compile Threads Directory (Pintos/threads)
-	
     ```
     cd threads
     make
     ```
-    
  5. ##### Edit pintos file (Pintos/utils)
 	Open Pintos/utils/pintos with text editor
-    ```
+	 ```
     ln 259 
     	replace 'kernel.bin' with
         	'/home/hicker/Desktop/Pintos/threads/build/kernel.bin'
     
-    
+
     ln 623
     	replace 'qemu-system-i386' with
         	'qemu-system-x86_64'
-    ```
+	```
     
         
  6. #### Edit pintos.pm file (Pintos/utils)
@@ -53,14 +50,14 @@ DISCLAIMER: DO NOT EVER USE this for your coursework.
     	replace 'loader.bin' with
         	'/home/hicker/Desktop/Pintos/threads/build/loader.bin'
     
-	```
+		```
         
     
  11. ### Export utils directory path to PATH variable
       Open ~/.bashrc with editor
       ```
       sudo nano ~/.bashrc
-      ```
+     ```
       Add this line to the end of the file and save it
       ```
       export PATH=/home/hicker/Desktop/Pintos/utils:$PATH
@@ -213,7 +210,7 @@ DISCLAIMER: DO NOT EVER USE this for your coursework.
     ```
 	static bool setup_stack (void **esp, char * cmdline);
     ```
-  * In line 233, comment the line  file = filesys_open (file_name);  and add these lines
+  * In line 233, comment the line  ~~file = filesys_open (file_name);~~  and add these lines
     ```
 	char * fn_cp = malloc (strlen(file_name)+1);
 	strlcpy(fn_cp, file_name, strlen(file_name)+1);
@@ -233,88 +230,88 @@ DISCLAIMER: DO NOT EVER USE this for your coursework.
     ```
    ##### replace the method setup_stack with this
    ```
-    static bool
-    setup_stack (void **esp, char * file_name) 
-    {
-      uint8_t *kpage;	// kernel virtual address
-      bool success = false;
-      
-      /* A pointer to the next free page is returned if there
-		  is a free page, otherwise, the function returns a null pointer
-         Arguements passed are bitwise OR of:
-         @PAL_USER - user page
-         @PAL_ZERO - a completely emptied page
-      */
-      kpage = palloc_get_page (PAL_USER | PAL_ZERO);
-      
-      // If got a page
-      if (kpage != NULL) 
-        {
-          // install this page into the thread’s page table
-          success = install_page (((uint8_t *) PHYS_BASE) - PGSIZE, kpage, true);
-          if (success)
-          
-            // set the stack pointer to the to the TOP of the stack ie.PHYS_BASE
-            *esp = PHYS_BASE; 
-          else
-            // free the page ie. unmap from table
-            palloc_free_page (kpage);
-        }
+		    static bool
+		    setup_stack (void **esp, char * file_name) 
+		    {
+		      uint8_t *kpage;	// kernel virtual address
+		      bool success = false;
+		      
+		      /* A pointer to the next free page is returned if there
+				  is a free page, otherwise, the function returns a null pointer
+		         Arguements passed are bitwise OR of:
+		         @PAL_USER - user page
+		         @PAL_ZERO - a completely emptied page
+		      */
+		      kpage = palloc_get_page (PAL_USER | PAL_ZERO);
+		      
+		      // If got a page
+		      if (kpage != NULL) 
+		        {
+		          // install this page into the thread’s page table
+		          success = install_page (((uint8_t *) PHYS_BASE) - PGSIZE, kpage, true);
+		          if (success)
+		          
+		            // set the stack pointer to the to the TOP of the stack ie.PHYS_BASE
+		            *esp = PHYS_BASE; 
+		          else
+		            // free the page ie. unmap from table
+		            palloc_free_page (kpage);
+		        }
 
-      char *token, *save_ptr;
-      int argc = 0,i;
+		      char *token, *save_ptr;
+		      int argc = 0,i;
 
-      char * copy = malloc(strlen(file_name)+1);
-      strlcpy (copy, file_name, strlen(file_name)+1);
-
-
-      for (token = strtok_r (copy, " ", &save_ptr); token != NULL;
-        token = strtok_r (NULL, " ", &save_ptr))
-        argc++;
+		      char * copy = malloc(strlen(file_name)+1);
+		      strlcpy (copy, file_name, strlen(file_name)+1);
 
 
-      int *argv = calloc(argc,sizeof(int));
+		      for (token = strtok_r (copy, " ", &save_ptr); token != NULL;
+		        token = strtok_r (NULL, " ", &save_ptr))
+		        argc++;
 
-      for (token = strtok_r (file_name, " ", &save_ptr),i=0; token != NULL;
-        token = strtok_r (NULL, " ", &save_ptr),i++)
-        {
-          *esp -= strlen(token) + 1;
-          memcpy(*esp,token,strlen(token) + 1);
 
-          argv[i]=*esp;
-        }
+		      int *argv = calloc(argc,sizeof(int));
 
-      while((int)*esp%4!=0)
-      {
-        *esp-=sizeof(char);
-        char x = 0;
-        memcpy(*esp,&x,sizeof(char));
-      }
+		      for (token = strtok_r (file_name, " ", &save_ptr),i=0; token != NULL;
+		        token = strtok_r (NULL, " ", &save_ptr),i++)
+		        {
+		          *esp -= strlen(token) + 1;
+		          memcpy(*esp,token,strlen(token) + 1);
 
-      int zero = 0;
+		          argv[i]=*esp;
+		        }
 
-      *esp-=sizeof(int);
-      memcpy(*esp,&zero,sizeof(int));
+		      while((int)*esp%4!=0)
+		      {
+		        *esp-=sizeof(char);
+		        char x = 0;
+		        memcpy(*esp,&x,sizeof(char));
+		      }
 
-      for(i=argc-1;i>=0;i--)
-      {
-        *esp-=sizeof(int);
-        memcpy(*esp,&argv[i],sizeof(int));
-      }
+		      int zero = 0;
 
-      int pt = *esp;
-      *esp-=sizeof(int);
-      memcpy(*esp,&pt,sizeof(int));
+		      *esp-=sizeof(int);
+		      memcpy(*esp,&zero,sizeof(int));
 
-      *esp-=sizeof(int);
-      memcpy(*esp,&argc,sizeof(int));
+		      for(i=argc-1;i>=0;i--)
+		      {
+		        *esp-=sizeof(int);
+		        memcpy(*esp,&argv[i],sizeof(int));
+		      }
 
-      *esp-=sizeof(int);
-      memcpy(*esp,&zero,sizeof(int));
+		      int pt = *esp;
+		      *esp-=sizeof(int);
+		      memcpy(*esp,&pt,sizeof(int));
 
-      return success;
-    }
-  ```
+		      *esp-=sizeof(int);
+		      memcpy(*esp,&argc,sizeof(int));
+
+		      *esp-=sizeof(int);
+		      memcpy(*esp,&zero,sizeof(int));
+
+		      return success;
+		    }
+   ```
 2. ##### Edit syscall.c
     Open Pintos/userprog/syscall.c with text editor.
     * Add include for 'process.h'
