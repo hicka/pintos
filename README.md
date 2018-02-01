@@ -1,4 +1,5 @@
 
+
 # PintOS
 
 This is a simple guide to get started with PintOS.
@@ -230,20 +231,32 @@ This is a simple guide to get started with PintOS.
 	if (!setup_stack (esp,file_name))
     ```
    ##### replace the method setup_stack with this
-```
+   ```
     static bool
     setup_stack (void **esp, char * file_name) 
     {
-      uint8_t *kpage;
+      uint8_t *kpage;	// kernel virtual address
       bool success = false;
-
+      
+      /* A pointer to the next free page is returned if there
+		  is a free page, otherwise, the function returns a null pointer
+         Arguements passed are bitwise OR of:
+         @PAL_USER - user page
+         @PAL_ZERO - a completely emptied page
+      */
       kpage = palloc_get_page (PAL_USER | PAL_ZERO);
+      
+      // If got a page
       if (kpage != NULL) 
         {
+          // install this page into the thread’s page table
           success = install_page (((uint8_t *) PHYS_BASE) - PGSIZE, kpage, true);
           if (success)
-            *esp = PHYS_BASE;
+          
+            // set the stack pointer to the to the TOP of the stack ie.PHYS_BASE
+            *esp = PHYS_BASE; 
           else
+            // free the page ie. unmap from table
             palloc_free_page (kpage);
         }
 
@@ -301,7 +314,7 @@ This is a simple guide to get started with PintOS.
       return success;
     }
   ```
-1. ##### Edit syscall.c
+2. ##### Edit syscall.c
     Open Pintos/userprog/syscall.c with text editor.
     * Add include for 'process.h'
     ```
@@ -312,7 +325,7 @@ This is a simple guide to get started with PintOS.
     * SYS_HALT (Terminates Pintos by calling power_off())
     * SYS_EXIT (user program that finishes in the normal way calls exit)
     * SYS_WRITE
-The write system call is for writing to fd 1, the system console. All of our test programs write to the console (the user process version of printf() is implemented this way), so they will all malfunction until write is available.
+								The write system call is for writing to fd 1, the system console. All of our test programs write to the console (the user process version of printf() is implemented this way), so they will all malfunction until write is available.
 	```
     static void
 	syscall_handler (struct intr_frame *f UNUSED) 
@@ -345,9 +358,9 @@ The write system call is for writing to fd 1, the system console. All of our tes
         }
     }
     ```
-1. ##### Edit thread.c    
-    Open Pintos/threads/thread.c with text editor.
-    * Line 193 add
+3. ##### Edit thread.c    
+  Open Pintos/threads/thread.c with text editor.
+  * Line 193 add
     ```
     struct child* c = malloc(sizeof(*c));
     c->tid = tid;
@@ -355,7 +368,7 @@ The write system call is for writing to fd 1, the system console. All of our tes
     c->used = false;
     list_push_back(&running_thread()->child_proc, &c->elem);
     ```
-     * Line 482 after t->magic = THREAD_MAGIC;
+* Line 482 after t->magic = THREAD_MAGIC;
     ```
     list_init(&t->child_proc);	
     t->ex = false;
@@ -364,7 +377,7 @@ The write system call is for writing to fd 1, the system console. All of our tes
     t->fd_count=2;
     t->waitingon=0;
     ```   
-1. ##### Edit thread.h  
+4. ##### Edit thread.h  
     Open Pintos/threads/thread.h with text editor.
   * in Line 97 add inside struct thread
     ```
