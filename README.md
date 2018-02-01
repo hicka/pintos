@@ -318,15 +318,15 @@ DISCLAIMER: DO NOT EVER USE this for your coursework.
     ```
 	#include "process.h"
     ```
-#### replace the syscall_handler function
+    Replace the syscall_handler function
     * This implements three system calls 
     * SYS_HALT (Terminates Pintos by calling power_off())
     * SYS_EXIT (user program that finishes in the normal way calls exit)
     * SYS_WRITE
 								The write system call is for writing to fd 1, the system console. All of our test programs write to the console (the user process version of printf() is implemented this way), so they will all malfunction until write is available.
                 
-	```
-  static void
+   ```
+        static void
 	syscall_handler (struct intr_frame *f UNUSED) 
 	{
  	 int * p = f->esp;
