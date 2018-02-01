@@ -2,8 +2,9 @@
 
 # PintOS
 
-This is a simple guide to get started with PintOS.
+This is a private output of 'Operating Systems' coursework, PintOS.
 
+DISCLAIMER: DO NOT EVER USE this for your coursework.
 
 ## Follow these Steps:
 1. ##### Install QEMU emulator if you haven't already.
