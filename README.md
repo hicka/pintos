@@ -316,17 +316,11 @@ DISCLAIMER: DO NOT EVER USE this for your coursework.
 2. ##### Edit syscall.c   
     Open Pintos/userprog/syscall.c with text editor.
     * Add include for 'process.h'
-    
-    ```
-	#include "process.h"
-    ```
-    
-Replace the syscall_handler function
-* This implements three system calls 
-* SYS_HALT (Terminates Pintos by calling power_off())
-* SYS_EXIT (user program that finishes in the normal way calls exit)
-* SYS_WRITE
-							The write system call is for writing to fd 1, the system console. All of our test programs write to the console (the user process version of printf() is implemented this way), so they will all malfunction until write is available.
+    Replace the syscall_handler function
+    * This implements three system calls 
+    * SYS_HALT (Terminates Pintos by calling power_off())
+    * SYS_EXIT (user program that finishes in the normal way calls exit)
+    * SYS_WRITE - The write system call is for writing to fd 1, the system console. All of our test programs write to the console (the         user process version of printf() is implemented this way), so they will all malfunction until write is available.
                 
    ```
         static void
@@ -340,24 +334,24 @@ Replace the syscall_handler function
 		switch (system_call)
 		{
 			case SYS_HALT:
-			shutdown_power_off();
-			break;
+			   shutdown_power_off();
+			   break;
 
-            case SYS_EXIT:
-            thread_current()->parent->ex = true;
-            thread_exit();
-            break;
+			case SYS_EXIT:
+			   thread_current()->parent->ex = true;
+			   thread_exit();
+			   break;
 
-            case SYS_WRITE:
-            if(*(p+5)==1)
-            {
-                putbuf(*(p+6),*(p+7));
-            }
-            break;
+			case SYS_WRITE:
+			   if(*(p+5)==1)
+			   {
+			      putbuf(*(p+6),*(p+7));
+			   }
+			   break;
 
-            default:
-            printf("No match\n");
-        }
+			default:
+			   printf("No match\n");
+               }
     }
     ```
 3. ##### Edit thread.c    
@@ -381,7 +375,7 @@ Replace the syscall_handler function
     ```   
 4. ##### Edit thread.h  
     Open Pintos/threads/thread.h with text editor.
-  * in Line 97 add inside struct thread
+	##### in Line 97 add inside struct thread
     ```
     bool ex;
     struct thread* parent;
@@ -390,7 +384,7 @@ Replace the syscall_handler function
     struct list child_proc;
     int waitingon;
     ```    
-  * create struct child, outside struct thread
+  	##### create struct child, outside struct thread
     ```
     struct child{
       int tid;
@@ -399,8 +393,8 @@ Replace the syscall_handler function
       bool used;
     };
     ```
-  * re-compile and run a user program with arguments.
-## SYSTEM CALLS
+	##### re-compile and run a user program with arguments.
+  ## SYSTEM CALLS
   ```
     SYS_HALT, /* Halt the operating system. */
     SYS_EXIT, /* Terminate this process. */
